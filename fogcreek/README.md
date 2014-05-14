@@ -34,13 +34,13 @@ Solution
 
 ### BruteForce
 
-See [BruteForce.java](../blob/master/fogcreek/BruteForce.java)
+See [BruteForce.java](../fogcreek/BruteForce.java)
 
 It is straightforward. 8 nested loops, in the last hash is checked.
 
 ### Reverse Hash
 
-See [ReverseHash.java](../blob/master/fogcreek/ReverseHash.java)
+See [ReverseHash.java](../fogcreek/ReverseHash.java)
 
 If you look precisely on hash function, you will see it has some nice features:
 
