@@ -16,6 +16,10 @@ quoteservice
 
 This is a test task for java developers. Need to create a service which accept quotes (symbol, price, timestamp) and construct trendbars.
 
+testcrawler
+-----------
+
+This is test crawler which crawls sites with following resctrictions: max crawler pages qty and crawl delay. Links from crawled pages are gathered and saved into file.
 
 udpdemo
 -------
