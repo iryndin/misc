@@ -32,7 +32,7 @@ public class HtmlFormatter extends AbstractFormatter {
                 String s = text.substring(pos, e.getStartPosition());
                 formattedText.append(s);
             }
-            formattedText.append(format(text, e));
+            formattedText.append(e.format(text));
             pos = e.getEndPosition();
         }
         if (pos < text.length()) {
@@ -40,33 +40,5 @@ public class HtmlFormatter extends AbstractFormatter {
             formattedText.append(s);
         }
         return new FormatResult(formattedText.toString());
-    }
-
-    private String format(String text, ObjectEntity e) {
-        switch(e.getType()) {
-            case ENTITY: return formatEntity(text, e);
-            case USERNAME_TWITTER: return formatTwitterUsername(text, e);
-            case LINK: return formatLink(text, e);
-            default: return noFormat(text, e);
-        }
-    }
-
-    private String noFormat(String text, ObjectEntity e) {
-        return text.substring(e.getStartPosition(), e.getEndPosition());
-    }
-
-    private String formatLink(String text, ObjectEntity e) {
-        String s = text.substring(e.getStartPosition(), e.getEndPosition());
-        return String.format("<a href=\"%s\">%s</a>", s,s);
-    }
-
-    private String formatTwitterUsername(String text, ObjectEntity e) {
-        String s = text.substring(e.getStartPosition(), e.getEndPosition());
-        return String.format("<a href=\"http://twitter.com/%s\">%s</a>", s,s);
-    }
-
-    private String formatEntity(String text, ObjectEntity e) {
-        String s = text.substring(e.getStartPosition(), e.getEndPosition());
-        return "<strong>" + s + "</strong>";
     }
 }

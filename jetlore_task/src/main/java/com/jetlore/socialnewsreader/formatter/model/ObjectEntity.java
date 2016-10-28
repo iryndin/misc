@@ -4,19 +4,15 @@ package com.jetlore.socialnewsreader.formatter.model;
  * @author iryndin
  * @since 27/10/16
  */
-public class ObjectEntity {
+public abstract class ObjectEntity {
     private final ObjectEntityType type;
     private final int startPosition;
     private final int endPosition;
 
-    ObjectEntity(ObjectEntityType type, int startPosition, int endPosition) {
+    protected ObjectEntity(ObjectEntityType type, int startPosition, int endPosition) {
         this.type = type;
         this.startPosition = startPosition;
         this.endPosition = endPosition;
-    }
-
-    public ObjectEntityType getType() {
-        return type;
     }
 
     public int getStartPosition() {
@@ -26,6 +22,8 @@ public class ObjectEntity {
     public int getEndPosition() {
         return endPosition;
     }
+
+    public abstract String format(String text);
 
     @Override
     public String toString() {
@@ -43,10 +41,9 @@ public class ObjectEntity {
 
         ObjectEntity that = (ObjectEntity) o;
 
-        if (startPosition != that.startPosition) return false;
-        if (endPosition != that.endPosition) return false;
-        return type == that.type;
-
+        return startPosition == that.startPosition &&
+                endPosition == that.endPosition &&
+                type == that.type;
     }
 
     @Override

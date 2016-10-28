@@ -9,20 +9,18 @@ import static java.lang.String.format;
 public class ObjectEntityFactory {
 
     public static ObjectEntity createEntity(int start, int end) {
-        return create(ObjectEntityType.ENTITY, start, end);
+        checkPositions(start, end);
+        return new RegularObjectEntity(start, end);
     }
 
     public static ObjectEntity createTwitterUsername(int start, int end) {
-        return create(ObjectEntityType.USERNAME_TWITTER, start, end);
+        checkPositions(start, end);
+        return new TwitterUsernameObjectEntity(start, end);
     }
 
     public static ObjectEntity createLink(int start, int end) {
-        return create(ObjectEntityType.LINK, start, end);
-    }
-
-    private static ObjectEntity create(ObjectEntityType type, int start, int end) {
         checkPositions(start, end);
-        return new ObjectEntity(type, start, end);
+        return new LinkObjectEntity(start, end);
     }
 
     private static void checkPositions(int start, int end) {
@@ -32,9 +30,5 @@ public class ObjectEntityFactory {
         if (end <= start) {
             throw new IllegalArgumentException(format("Entity end position is <= than start position (%d <= %d)!", end, start));
         }
-    }
-
-    public static void main(String[] args) {
-        checkPositions(1,1);
     }
 }
