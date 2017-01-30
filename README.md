@@ -6,10 +6,20 @@ This repo contains misc stuff which is too small or unimportant to make a separa
 List of projects
 ================
 
+computetree
+-----------
+
+This is a task to create framework for running computations which are organizaed into a tree of nodes.
+
 fogcreek
 --------
 
 This is a solution of FogCreek test task for software developers. See [task description](http://www.fogcreek.com/Jobs/Dev/).
+
+jetlore_task
+------------
+
+Test task from Jetlore company.
 
 quoteservice
 ------------
