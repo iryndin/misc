@@ -1,0 +1,22 @@
+tree:
+  version: 1
+  start: valid
+  nodes:
+    - id: valid
+      class: net.iryndin.computetree.node.CheckValidityNode
+      results:
+        valid:
+          - wanted
+          - terror
+    - id: wanted
+      class: net.iryndin.computetree.node.TrivialSuccessNode
+      results:
+        success:
+          - wantedLocal
+          - wantedIntl
+    - id: terror
+      class: net.iryndin.computetree.node.CheckTerrorNode
+    - id: wantedLocal
+      class: net.iryndin.computetree.node.CheckWantedLocalNode
+    - id: wantedIntl
+      class: net.iryndin.computetree.node.CheckWantedIntlNode
