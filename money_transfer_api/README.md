@@ -11,6 +11,13 @@ Following technologies are used:
  - Framework: Dropwizard Framework (http://dropwizard.io)
  - Storage: H2 (http://www.h2database.com)
  - Tests: JUnit + Mockito
+ 
+## How to run
+ 
+Build the app: `mvn clean package`
+
+Run the app: `java -jar target/mtapi-1.0.jar server app.yml`
+
 
 ## Data model
 

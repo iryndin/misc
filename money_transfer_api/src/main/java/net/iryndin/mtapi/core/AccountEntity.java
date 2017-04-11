@@ -28,6 +28,16 @@ public class AccountEntity {
     @Column(name = "update_date", nullable = false)
     private Date updateDate;
 
+    public AccountEntity() {
+    }
+
+    public AccountEntity(Long id, long balance, Date createDate, Date updateDate) {
+        this.id = id;
+        this.balance = balance;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
+    }
+
     public Long getId() {
         return id;
     }

@@ -45,7 +45,8 @@ public class TransactionEntity {
     public TransactionEntity() {
     }
 
-    public TransactionEntity(Long id, long amount, Date createDate, String description, int type, AccountEntity creditAccount, AccountEntity debitAccount) {
+    public TransactionEntity(Long id, long amount, Date createDate, String description, int type,
+                             AccountEntity creditAccount, AccountEntity debitAccount) {
         this.id = id;
         this.amount = amount;
         this.createDate = createDate;
