@@ -11,6 +11,9 @@ import net.iryndin.mtapi.core.AccountEntity;
 import net.iryndin.mtapi.core.TransactionEntity;
 import net.iryndin.mtapi.db.AccountDao;
 import net.iryndin.mtapi.db.TransactionDao;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -20,10 +23,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author iryndin
@@ -35,6 +39,11 @@ public class TransactionResource {
 
     private AccountDao accountDao;
     private TransactionDao transactionDao;
+
+    static final Function<TransactionEntity, TxResponse> txConverter = tx -> new TxResponse(
+            tx.getId(), tx.getCreditAccount().getId(), tx.getDebitAccount().getId(),
+            tx.getAmount(), tx.getCreateDate(), tx.getDescription(), tx.getType()
+    );
 
     public TransactionResource(AccountDao accountDao, TransactionDao transactionDao) {
         this.accountDao = accountDao;
@@ -58,6 +67,7 @@ public class TransactionResource {
     }
 
     @GET
+    @UnitOfWork
     @Path("/transfers")
     public ApiResponse getTxs(
             @QueryParam("credit_account_id") Long creditAccountId,
@@ -65,12 +75,33 @@ public class TransactionResource {
             @QueryParam("type") Integer type,
             @QueryParam("start_ts") Long startTs,
             @QueryParam("end_ts") Long endTs) {
-        List<TxResponse> list = Arrays.asList(
-                new TxResponse(11L, 22L, 33L, 7777L, new Date(), "example tx 1", 1),
-                new TxResponse(111L, 222L, 333L, 8888L, new Date(), "example tx 2", 2),
-                new TxResponse(1111L, 2222L, 3333L, 9999L, new Date(), "example tx 3", 3)
-                );
-        return new ApiResponseOK<>(list);
+
+        Criteria crit = transactionDao.createCriteria();
+        if (creditAccountId != null) {
+            crit.add(Restrictions.eq("creditAccount.id", creditAccountId));
+        }
+        if (debitAccountId != null) {
+            crit.add(Restrictions.eq("debitAccount.id", debitAccountId));
+        }
+        if (type != null) {
+            crit.add(Restrictions.eq("type", type));
+        }
+        if (startTs != null) {
+            crit.add(Restrictions.ge("createDate", new Date(startTs)));
+        }
+        if (endTs != null) {
+            if (startTs != null && endTs <= startTs) {
+                return new ApiResponseError("end_ts shoud be greater than start_ts", ApiResponseError.ERROR_INCORRECT_END_DATE);
+            }
+            crit.add(Restrictions.le("createDate", new Date(endTs)));
+        }
+
+        crit.setMaxResults(1000);
+        crit.addOrder(Order.desc("createDate"));
+
+        List<TransactionEntity> list = transactionDao.list(crit);
+
+        return new ApiResponseOK<>(list.stream().map(txConverter).collect(Collectors.toList()));
     }
 
     @PUT

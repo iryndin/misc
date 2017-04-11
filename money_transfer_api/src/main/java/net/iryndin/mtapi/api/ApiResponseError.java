@@ -12,6 +12,8 @@ public class ApiResponseError extends ApiResponse {
     public static final int ERROR_WRONG_ACCOUNT_IDS = 113;
     public static final int ERROR_WRONG_TX_AMOUNT = 114;
     public static final int ERROR_INSUFFICIENT_BALANCE = 115;
+    public static final int ERROR_INCORRECT_END_DATE = 116;
+
     public static final int ERROR_GENERAL = 500;
 
     private String errorMessage;
