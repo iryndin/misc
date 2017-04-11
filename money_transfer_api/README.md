@@ -67,7 +67,7 @@ or
 
 {
   "status": "FAIL",
-  "errorId": 12345, 
+  "errorCode": 12345, 
   "errorMessage": "No such account"
 }
 ```
@@ -81,7 +81,8 @@ Body:
 ``` json
 {
   "amount": 12345,
-  "type": 11
+  "type": 11,
+  "description": "example tx"
 }
 ```
 
@@ -99,9 +100,15 @@ or
 
 {
   "status": "FAIL",
-  "errorId": 12345, 
+  "errorCode": 12345, 
   "errorMessage": "Not enough money on credit account"
 }
+```
+
+CURL command line: 
+
+```
+curl -X PUT --data "{\"amount\": 12345, \"type\": 11, \"description\": \"example tx\"}" -H "Content-Type: application/json"  http://localhost:8080/transfer/1/2
 ```
 
 ### Get transaction object by ID
@@ -128,7 +135,7 @@ or
 
 {
   "status": "FAIL",
-  "errorId": 12345, 
+  "errorCode": 12345, 
   "errorMessage": "No such transaction"
 }
 ```
@@ -174,7 +181,7 @@ or
 
 {
   "status": "FAIL",
-  "errorId": 12345, 
+  "errorCode": 12345, 
   "errorMessage": "Wrong format of credit_account_id parameter"
 }
 ```
