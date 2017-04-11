@@ -6,8 +6,13 @@ import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import net.iryndin.mtapi.core.AccountEntity;
+import net.iryndin.mtapi.core.TransactionEntity;
+import net.iryndin.mtapi.db.AccountDao;
+import net.iryndin.mtapi.db.TransactionDao;
 import net.iryndin.mtapi.resources.AccountResource;
 import net.iryndin.mtapi.resources.TransactionResource;
+
+import javax.ws.rs.ext.ExceptionMapper;
 
 /**
  * @author iryndin
@@ -20,7 +25,7 @@ public class MTAPIApplication extends Application<MTAPIConfiguration> {
         }
 
         private final HibernateBundle<MTAPIConfiguration> hibernateBundle =
-                new HibernateBundle<MTAPIConfiguration>(AccountEntity.class) {
+                new HibernateBundle<MTAPIConfiguration>(AccountEntity.class, TransactionEntity.class) {
                     @Override
                     public DataSourceFactory getDataSourceFactory(MTAPIConfiguration configuration) {
                         return configuration.getDataSourceFactory();
@@ -39,24 +44,12 @@ public class MTAPIApplication extends Application<MTAPIConfiguration> {
 
         @Override
         public void run(MTAPIConfiguration configuration, Environment environment) {
-            environment.jersey().register(new AccountResource());
-            environment.jersey().register(new TransactionResource());
-            /*
-            environment.healthChecks().register("template", new TemplateHealthCheck(template));
-            environment.admin().addTask(new EchoTask());
-            environment.jersey().register(DateRequiredFeature.class);
-            environment.jersey().register(new AuthDynamicFeature(new BasicCredentialAuthFilter.Builder<User>()
-                    .setAuthenticator(new ExampleAuthenticator())
-                    .setAuthorizer(new ExampleAuthorizer())
-                    .setRealm("SUPER SECRET STUFF")
-                    .buildAuthFilter()));
-            environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
-            environment.jersey().register(RolesAllowedDynamicFeature.class);
-            environment.jersey().register(new HelloWorldResource(template));
-            environment.jersey().register(new ViewResource());
-            environment.jersey().register(new ProtectedResource());
-            environment.jersey().register(new PeopleResource(dao));
-            environment.jersey().register(new PersonResource(dao));
-            environment.jersey().register(new FilteredResource());*/
+            final AccountDao accountDao = new AccountDao(hibernateBundle.getSessionFactory());
+            final TransactionDao transactionDao = new TransactionDao(hibernateBundle.getSessionFactory());
+            final ExceptionMapper exMapper = new GeneralExceptionMapper();
+
+            environment.jersey().register(exMapper);
+            environment.jersey().register(new AccountResource(accountDao));
+            environment.jersey().register(new TransactionResource(accountDao, transactionDao));
         }
 }

@@ -7,26 +7,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since 11/04/17
  */
 public class TransferRequest {
-    private Long amount;
-    private Integer type;
+    private long amount;
+    private int type;
     private String description;
 
     public TransferRequest() {
     }
 
-    public TransferRequest(Long amount, Integer type, String description) {
+    public TransferRequest(long amount, int type, String description) {
         this.amount = amount;
         this.type = type;
         this.description = description;
     }
 
     @JsonProperty
-    public Long getAmount() {
+    public long getAmount() {
         return amount;
     }
 
     @JsonProperty
-    public Integer getType() {
+    public int getType() {
         return type;
     }
 

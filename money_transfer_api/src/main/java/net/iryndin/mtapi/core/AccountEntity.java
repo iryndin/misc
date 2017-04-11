@@ -16,12 +16,6 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "account")
-@NamedQueries({
-    @NamedQuery(
-        name = "net.iryndin.mtapi.core.Account.findAll",
-        query = "SELECT a FROM AccountEntity a"
-    )
-})
 public class AccountEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,6 +44,11 @@ public class AccountEntity {
 
     public void setBalance(long balance) {
         this.balance = balance;
+    }
+
+    public void incrBalance(long diff, Date date) {
+        this.balance += diff;
+        this.updateDate = date;
     }
 
     public Date getCreateDate() {

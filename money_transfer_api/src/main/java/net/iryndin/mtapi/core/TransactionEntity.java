@@ -7,7 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.Date;
@@ -42,6 +41,19 @@ public class TransactionEntity {
     @OneToOne(fetch= FetchType.LAZY)
     @JoinColumn(name="debit_account_id")
     private AccountEntity debitAccount;
+
+    public TransactionEntity() {
+    }
+
+    public TransactionEntity(Long id, long amount, Date createDate, String description, int type, AccountEntity creditAccount, AccountEntity debitAccount) {
+        this.id = id;
+        this.amount = amount;
+        this.createDate = createDate;
+        this.description = description;
+        this.type = type;
+        this.creditAccount = creditAccount;
+        this.debitAccount = debitAccount;
+    }
 
     public Long getId() {
         return id;

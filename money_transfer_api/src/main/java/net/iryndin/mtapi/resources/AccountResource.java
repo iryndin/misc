@@ -1,15 +1,19 @@
 package net.iryndin.mtapi.resources;
 
+import io.dropwizard.hibernate.UnitOfWork;
 import net.iryndin.mtapi.api.ApiResponse;
 import net.iryndin.mtapi.api.ApiResponseError;
 import net.iryndin.mtapi.api.ApiResponseOK;
 import net.iryndin.mtapi.api.BalanceResponse;
+import net.iryndin.mtapi.core.AccountEntity;
+import net.iryndin.mtapi.db.AccountDao;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.Optional;
 
 /**
  * @author iryndin
@@ -19,9 +23,20 @@ import javax.ws.rs.core.MediaType;
 @Produces(MediaType.APPLICATION_JSON)
 public class AccountResource {
 
+    private AccountDao accountDao;
+
+    public AccountResource(AccountDao accountDao) {
+        this.accountDao = accountDao;
+    }
+
     @GET
-    public ApiResponse getBalance(@PathParam("accountId") int accountId) {
-        //return new ApiResponseOK<>(new BalanceResponse(222));
-        return new ApiResponseError("bzzzz",accountId);
+    @UnitOfWork
+    public ApiResponse getBalance(@PathParam("accountId") long accountId) {
+        Optional<AccountEntity> accOpt = accountDao.findById(accountId);
+        if (!accOpt.isPresent()) {
+            return new ApiResponseError("No account with this ID", ApiResponseError.ERROR_NO_ACCOUNT);
+        } else {
+            return new ApiResponseOK<>(new BalanceResponse(accOpt.get().getBalance()));
+        }
     }
 }
