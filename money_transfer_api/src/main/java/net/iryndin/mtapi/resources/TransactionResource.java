@@ -1,6 +1,7 @@
 package net.iryndin.mtapi.resources;
 
 import io.dropwizard.hibernate.UnitOfWork;
+import net.iryndin.mtapi.MTException;
 import net.iryndin.mtapi.api.ApiResponse;
 import net.iryndin.mtapi.api.ApiResponseError;
 import net.iryndin.mtapi.api.ApiResponseOK;
@@ -11,6 +12,7 @@ import net.iryndin.mtapi.core.AccountEntity;
 import net.iryndin.mtapi.core.TransactionEntity;
 import net.iryndin.mtapi.db.AccountDao;
 import net.iryndin.mtapi.db.TransactionDao;
+import org.hibernate.CacheMode;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -51,23 +53,19 @@ public class TransactionResource {
     }
 
     @GET
-    @UnitOfWork
+    @UnitOfWork(readOnly = true, cacheMode = CacheMode.IGNORE)
     @Path("/transfer/{txId}")
     public ApiResponse getTx(@PathParam("txId") Long txId) {
-        Optional<TransactionEntity> txOpt = transactionDao.findById(txId);
-        if (!txOpt.isPresent()) {
-            return new ApiResponseError("No transaction with this ID", ApiResponseError.ERROR_NO_TX);
-        } else {
-            TransactionEntity tx = txOpt.get();
-            return new ApiResponseOK<>(new TxResponse(tx.getId(),
+        TransactionEntity tx = transactionDao.findById(txId)
+                .orElseThrow(() -> new MTException("No transaction with this ID", ApiResponseError.ERROR_NO_TX));
+        return new ApiResponseOK<>(new TxResponse(tx.getId(),
                     tx.getCreditAccount().getId(), tx.getDebitAccount().getId(),
                     tx.getAmount(), tx.getCreateDate(),
                     tx.getDescription(), tx.getType()));
-        }
     }
 
     @GET
-    @UnitOfWork
+    @UnitOfWork(readOnly = true, cacheMode = CacheMode.IGNORE)
     @Path("/transfers")
     public ApiResponse getTxs(
             @QueryParam("credit_account_id") Long creditAccountId,
@@ -91,7 +89,7 @@ public class TransactionResource {
         }
         if (endTs != null) {
             if (startTs != null && endTs <= startTs) {
-                return new ApiResponseError("end_ts shoud be greater than start_ts", ApiResponseError.ERROR_INCORRECT_END_DATE);
+                return new ApiResponseError("end_ts should be greater than start_ts", ApiResponseError.ERROR_INCORRECT_END_DATE);
             }
             crit.add(Restrictions.le("createDate", new Date(endTs)));
         }
@@ -105,7 +103,7 @@ public class TransactionResource {
     }
 
     @PUT
-    @UnitOfWork
+    @UnitOfWork(cacheMode = CacheMode.IGNORE)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/transfer/{creditAccountId}/{debitAccountId}")
     public ApiResponse transfer(
@@ -117,38 +115,32 @@ public class TransactionResource {
                     ApiResponseError.ERROR_WRONG_ACCOUNT_IDS);
         }
 
-        Optional<AccountEntity> creditAccOpt = accountDao.findById(creditAccountId);
-        if (!creditAccOpt.isPresent()) {
-            return new ApiResponseError("Credit account ID wrong",
-                    ApiResponseError.ERROR_NO_ACCOUNT);
-        }
+        AccountEntity creditAcc = accountDao.findById(creditAccountId)
+                .orElseThrow(() -> new MTException("Credit account ID wrong", ApiResponseError.ERROR_NO_ACCOUNT));
 
-        Optional<AccountEntity> debitAccOpt = accountDao.findById(debitAccountId);
-        if (!debitAccOpt.isPresent()) {
-            return new ApiResponseError("Debit account ID wrong",
-                    ApiResponseError.ERROR_NO_ACCOUNT);
-        }
+        AccountEntity debitAcc = accountDao.findById(debitAccountId)
+                .orElseThrow(() -> new MTException("Debit account ID wrong", ApiResponseError.ERROR_NO_ACCOUNT));
 
         if (txData.getAmount() <= 0) {
             return new ApiResponseError("Zero or negative transaction amount",
                     ApiResponseError.ERROR_WRONG_TX_AMOUNT);
         }
 
-        if (creditAccOpt.get().getBalance() < txData.getAmount()) {
+        if (creditAcc.getBalance() < txData.getAmount()) {
             return new ApiResponseError("Insufficient balance on credit account",
                     ApiResponseError.ERROR_INSUFFICIENT_BALANCE);
         }
 
         Date now = new Date();
-        creditAccOpt.get().incrBalance(-txData.getAmount(), now);
-        debitAccOpt.get().incrBalance(-txData.getAmount(), now);
+        creditAcc.incrBalance(-txData.getAmount(), now);
+        debitAcc.incrBalance(-txData.getAmount(), now);
 
         TransactionEntity tx = new TransactionEntity(null,
                 txData.getAmount(), now, txData.getDescription(), txData.getType(),
-                creditAccOpt.get(), debitAccOpt.get());
+                creditAcc, debitAcc);
 
-        accountDao.createOrUpdate(creditAccOpt.get());
-        accountDao.createOrUpdate(debitAccOpt.get());
+        accountDao.createOrUpdate(creditAcc);
+        accountDao.createOrUpdate(debitAcc);
         tx = transactionDao.createOrUpdate(tx);
 
         return new ApiResponseOK<>(new TransferResponse(tx.getId()));

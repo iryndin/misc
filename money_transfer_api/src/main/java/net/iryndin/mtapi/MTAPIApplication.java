@@ -21,35 +21,37 @@ import javax.ws.rs.ext.ExceptionMapper;
 public class MTAPIApplication extends Application<MTAPIConfiguration> {
 
     public static void main(String[] args) throws Exception {
-            new MTAPIApplication().run(args);
-        }
+        new MTAPIApplication().run(args);
+    }
 
-        private final HibernateBundle<MTAPIConfiguration> hibernateBundle =
-                new HibernateBundle<MTAPIConfiguration>(AccountEntity.class, TransactionEntity.class) {
-                    @Override
-                    public DataSourceFactory getDataSourceFactory(MTAPIConfiguration configuration) {
-                        return configuration.getDataSourceFactory();
-                    }
-                };
+    private final HibernateBundle<MTAPIConfiguration> hibernateBundle =
+            new HibernateBundle<MTAPIConfiguration>(AccountEntity.class, TransactionEntity.class) {
+                @Override
+                public DataSourceFactory getDataSourceFactory(MTAPIConfiguration configuration) {
+                    return configuration.getDataSourceFactory();
+                }
+            };
 
-        @Override
-        public String getName() {
-            return "Money Transfer API";
-        }
+    @Override
+    public String getName() {
+        return "Money Transfer API";
+    }
 
-        @Override
-        public void initialize(Bootstrap<MTAPIConfiguration> bootstrap) {
-            bootstrap.addBundle(hibernateBundle);
-        }
+    @Override
+    public void initialize(Bootstrap<MTAPIConfiguration> bootstrap) {
+        bootstrap.addBundle(hibernateBundle);
+    }
 
-        @Override
-        public void run(MTAPIConfiguration configuration, Environment environment) {
-            final AccountDao accountDao = new AccountDao(hibernateBundle.getSessionFactory());
-            final TransactionDao transactionDao = new TransactionDao(hibernateBundle.getSessionFactory());
-            final ExceptionMapper exMapper = new GeneralExceptionMapper();
+    @Override
+    public void run(MTAPIConfiguration configuration, Environment environment) {
+        final AccountDao accountDao = new AccountDao(hibernateBundle.getSessionFactory());
+        final TransactionDao transactionDao = new TransactionDao(hibernateBundle.getSessionFactory());
+        final ExceptionMapper mtExMapper = new MTExceptionMapper();
+        final ExceptionMapper exMapper = new GeneralExceptionMapper();
 
-            environment.jersey().register(exMapper);
-            environment.jersey().register(new AccountResource(accountDao));
-            environment.jersey().register(new TransactionResource(accountDao, transactionDao));
-        }
+        environment.jersey().register(mtExMapper);
+        environment.jersey().register(exMapper);
+        environment.jersey().register(new AccountResource(accountDao));
+        environment.jersey().register(new TransactionResource(accountDao, transactionDao));
+    }
 }
