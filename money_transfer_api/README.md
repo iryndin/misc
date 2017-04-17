@@ -115,7 +115,7 @@ or
 CURL command line: 
 
 ```
-curl -X PUT --data "{\"amount\": 12345, \"type\": 11, \"description\": \"example tx\"}" -H "Content-Type: application/json"  http://localhost:8080/transfer/1/2
+curl -X POST --data "{\"amount\": 12345, \"type\": 11, \"description\": \"example tx\"}" -H "Content-Type: application/json"  http://localhost:8080/transfer/111/222
 ```
 
 ### Get transaction object by ID

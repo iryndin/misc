@@ -11,8 +11,6 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -41,7 +39,7 @@ public class AccountResourceTest {
 
     @Before
     public void setUp() {
-        account = new AccountEntity(11L, 22L, new Date(), new Date());
+        account = new AccountEntity(11L, 22L, new Date(), new Date(), 1);
     }
 
     @After

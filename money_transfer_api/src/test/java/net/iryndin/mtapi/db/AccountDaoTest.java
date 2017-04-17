@@ -33,7 +33,7 @@ public class AccountDaoTest {
     @Test
     public void testCreateOrUpdate() {
         final AccountEntity acc = daoTestRule.inTransaction(() ->
-                accountDao.createOrUpdate(new AccountEntity(null, 11, new Date(), new Date())));
+                accountDao.createOrUpdate(new AccountEntity(null, 11, new Date(), new Date(), 1)));
         assertThat(acc.getId()).isGreaterThan(0);
         assertThat(acc.getBalance()).isEqualTo(11);
         assertThat(acc.getCreateDate()).isNotNull();
@@ -44,9 +44,9 @@ public class AccountDaoTest {
     public void testFindById() {
         final List<Long> accIds = Lists.newArrayList();
         daoTestRule.inTransaction(() -> {
-            accIds.add(accountDao.createOrUpdate(new AccountEntity(null, 11, new Date(), new Date())).getId());
-            accIds.add(accountDao.createOrUpdate(new AccountEntity(null, 22, new Date(), new Date())).getId());
-            accIds.add(accountDao.createOrUpdate(new AccountEntity(null, 33, new Date(), new Date())).getId());
+            accIds.add(accountDao.createOrUpdate(new AccountEntity(null, 11, new Date(), new Date(), 1)).getId());
+            accIds.add(accountDao.createOrUpdate(new AccountEntity(null, 22, new Date(), new Date(), 1)).getId());
+            accIds.add(accountDao.createOrUpdate(new AccountEntity(null, 33, new Date(), new Date(), 1)).getId());
         });
 
         assertThat(accountDao.findById(accIds.get(0)).isPresent()).isTrue();

@@ -19,7 +19,7 @@ import org.hibernate.criterion.Restrictions;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -27,7 +27,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -102,7 +101,7 @@ public class TransactionResource {
         return new ApiResponseOK<>(list.stream().map(txConverter).collect(Collectors.toList()));
     }
 
-    @PUT
+    @POST
     @UnitOfWork(cacheMode = CacheMode.IGNORE)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/transfer/{creditAccountId}/{debitAccountId}")
@@ -110,7 +109,7 @@ public class TransactionResource {
             @PathParam("creditAccountId") Long creditAccountId,
             @PathParam("debitAccountId") Long debitAccountId,
             TransferRequest txData) {
-        if (creditAccountId == debitAccountId) {
+        if (creditAccountId.equals(debitAccountId)) {
             return new ApiResponseError("Credit account ID should not be equal to debit account ID",
                     ApiResponseError.ERROR_WRONG_ACCOUNT_IDS);
         }

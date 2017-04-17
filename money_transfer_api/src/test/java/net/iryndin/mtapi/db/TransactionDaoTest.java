@@ -39,9 +39,9 @@ public class TransactionDaoTest {
     @Test
     public void testCreateOrUpdate() {
         final AccountEntity accCredit = daoTestRule.inTransaction(() ->
-                accountDao.createOrUpdate(new AccountEntity(null, 11, new Date(), new Date())));
+                accountDao.createOrUpdate(new AccountEntity(null, 11, new Date(), new Date(), 1)));
         final AccountEntity accDebit = daoTestRule.inTransaction(() ->
-                accountDao.createOrUpdate(new AccountEntity(null, 22, new Date(), new Date())));
+                accountDao.createOrUpdate(new AccountEntity(null, 22, new Date(), new Date(), 1)));
 
         final TransactionEntity tx = daoTestRule.inTransaction(() ->
                 transactionDao.createOrUpdate(new TransactionEntity(null, 11, new Date(),
@@ -59,9 +59,9 @@ public class TransactionDaoTest {
     @Test
     public void testFindById() {
         final AccountEntity accCredit = daoTestRule.inTransaction(() ->
-                accountDao.createOrUpdate(new AccountEntity(null, 100, new Date(), new Date())));
+                accountDao.createOrUpdate(new AccountEntity(null, 100, new Date(), new Date(), 1)));
         final AccountEntity accDebit = daoTestRule.inTransaction(() ->
-                accountDao.createOrUpdate(new AccountEntity(null, 22, new Date(), new Date())));
+                accountDao.createOrUpdate(new AccountEntity(null, 22, new Date(), new Date(), 1)));
 
         final List<Long> txtIds = Lists.newArrayList();
         daoTestRule.inTransaction(() -> {
@@ -82,16 +82,16 @@ public class TransactionDaoTest {
     @Test
     public void testList() {
         final AccountEntity accCredit1 = daoTestRule.inTransaction(() ->
-                accountDao.createOrUpdate(new AccountEntity(null, 100, new Date(), new Date())));
+                accountDao.createOrUpdate(new AccountEntity(null, 100, new Date(), new Date(), 1)));
         final AccountEntity accDebit1 = daoTestRule.inTransaction(() ->
-                accountDao.createOrUpdate(new AccountEntity(null, 22, new Date(), new Date())));
+                accountDao.createOrUpdate(new AccountEntity(null, 22, new Date(), new Date(), 1)));
 
         final AccountEntity accCredit2 = daoTestRule.inTransaction(() ->
-                accountDao.createOrUpdate(new AccountEntity(null, 100, new Date(), new Date())));
+                accountDao.createOrUpdate(new AccountEntity(null, 100, new Date(), new Date(), 1)));
         final AccountEntity accDebit2 = daoTestRule.inTransaction(() ->
-                accountDao.createOrUpdate(new AccountEntity(null, 22, new Date(), new Date())));
+                accountDao.createOrUpdate(new AccountEntity(null, 22, new Date(), new Date(), 1)));
         final AccountEntity accDebit3 = daoTestRule.inTransaction(() ->
-                accountDao.createOrUpdate(new AccountEntity(null, 33, new Date(), new Date())));
+                accountDao.createOrUpdate(new AccountEntity(null, 33, new Date(), new Date(), 1)));
 
         final List<Long> txtIds = Lists.newArrayList();
         daoTestRule.inTransaction(() -> {

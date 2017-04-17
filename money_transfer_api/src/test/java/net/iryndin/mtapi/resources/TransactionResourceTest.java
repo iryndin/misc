@@ -44,8 +44,8 @@ public class TransactionResourceTest {
 
     @Before
     public void setUp() {
-        accountCredit = new AccountEntity(1L, 40, new Date(), new Date());
-        accountDebit = new AccountEntity(2L, 30, new Date(), new Date());
+        accountCredit = new AccountEntity(1L, 40, new Date(), new Date(), 1);
+        accountDebit = new AccountEntity(2L, 30, new Date(), new Date(), 1);
     }
 
     @After

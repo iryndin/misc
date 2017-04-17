@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Version;
 import java.util.Date;
 
 /**
@@ -28,14 +29,21 @@ public class AccountEntity {
     @Column(name = "update_date", nullable = false)
     private Date updateDate;
 
+    /**
+     * Concurrency control for account updates
+     */
+    @Version
+    private int version;
+
     public AccountEntity() {
     }
 
-    public AccountEntity(Long id, long balance, Date createDate, Date updateDate) {
+    public AccountEntity(Long id, long balance, Date createDate, Date updateDate, int version) {
         this.id = id;
         this.balance = balance;
         this.createDate = createDate;
         this.updateDate = updateDate;
+        this.version = version;
     }
 
     public Long getId() {
@@ -73,5 +81,13 @@ public class AccountEntity {
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }
