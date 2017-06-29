@@ -1,5 +1,6 @@
 package com.vegaecm.passwordencr;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.io.CharStreams;
 import org.apache.commons.io.IOUtils;
@@ -13,10 +14,8 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * @author iryndin
@@ -54,7 +53,7 @@ public class Main {
     FileInputStream fis = null;
     try {
       fis = new FileInputStream(f);
-      fileContent = IOUtils.toString(fis, StandardCharsets.UTF_8);
+      fileContent = IOUtils.toString(fis, "UTF-8");
     } catch (IOException ioe) {
       log.error("ERROR: Cannot read file: " + f, ioe);
       return false;
@@ -108,7 +107,7 @@ public class Main {
     if (changed) {
       return Optional.of(strToProcess);
     } else {
-      return Optional.empty();
+      return Optional.absent();
     }
   }
 
@@ -141,7 +140,7 @@ public class Main {
     if (changed) {
       return Optional.of(strToProcess);
     } else {
-      return Optional.empty();
+      return Optional.absent();
     }
   }
 
