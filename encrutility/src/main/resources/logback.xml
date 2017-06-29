@@ -1,0 +1,47 @@
+<configuration>
+
+    <property name="LOGHOME" value="." />
+
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} %line: %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="allAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGHOME}/all.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Rollover at the beginning of every day. -->
+            <fileNamePattern>${LOGHOME}/all.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} %line: %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="errorsAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+        <file>${LOGHOME}/error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Rollover at the beginning of every day. -->
+            <fileNamePattern>${LOGHOME}/error.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} %line: %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.vegaecm.passwordencr" level="debug">
+        <appender-ref ref="consoleAppender"/>
+        <appender-ref ref="allAppender"/>
+        <appender-ref ref="errorsAppender"/>
+    </logger>
+</configuration>

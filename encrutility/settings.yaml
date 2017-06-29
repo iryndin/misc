@@ -1,0 +1,6 @@
+settings:
+  encrcmdline: bash test.sh -pwd ${str}
+  files: files.txt
+  boundaries:
+    - start: <Password>
+      end: </Password>
