@@ -155,7 +155,7 @@ public class Main {
 
   private String runUtility(String strToEncrypt, String commandline) throws Exception {
     final String SUFFIX = "Encrypted password: ";
-    String path = commandline.replace("${str}", commandline);
+    String path = commandline.replace("${str}", strToEncrypt);
     Process p = Runtime.getRuntime().exec(path);
     p.waitFor();
     BufferedReader reader = null;
