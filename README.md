@@ -26,6 +26,11 @@ quoteservice
 
 This is a test task for java developers. Need to create a service which accept quotes (symbol, price, timestamp) and construct trendbars.
 
+rockpaperscissors
+-----------------
+
+This is console game "Rock-Paper-Scissors". 
+
 testcrawler
 -----------
 
