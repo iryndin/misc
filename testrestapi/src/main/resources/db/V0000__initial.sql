@@ -12,8 +12,12 @@ INSERT INTO tlds (name, price) VALUES
 
 CREATE TABLE domains (
   id INT AUTO_INCREMENT  PRIMARY KEY,
-  name VARCHAR(255) NOT NULL
+  name VARCHAR(255) NOT NULL,
+  tld VARCHAR(255) NOT NULL,
+  unique(name,tld)
 );
 
-INSERT INTO domains (name) VALUES
-  ('existing');
+create index IF NOT EXISTS domains_name_idx on domains(name);
+
+INSERT INTO domains (name, tld) VALUES
+  ('existing', 'com');

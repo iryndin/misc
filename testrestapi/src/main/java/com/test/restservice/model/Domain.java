@@ -1,9 +1,6 @@
 package com.test.restservice.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,4 +18,6 @@ public class Domain implements Serializable {
     private Long id;
     @Column
     private String name;
+    @Column
+    private String tld;
 }

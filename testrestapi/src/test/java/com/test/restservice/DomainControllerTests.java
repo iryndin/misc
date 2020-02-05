@@ -64,4 +64,11 @@ public class DomainControllerTests {
                 .andExpect(jsonPath("$[2].price").value(15.99))
                 .andExpect(jsonPath("$[2].available").value(true));
     }
+
+    @Test
+    public void testInvalidDomainName() throws Exception {
+
+        this.mockMvc.perform(get("/domains/check?search=not_valid"))
+                .andDo(print()).andExpect(status().isBadRequest());
+    }
 }
