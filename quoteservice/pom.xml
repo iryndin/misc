@@ -16,7 +16,7 @@
         <maven.compiler.fork>true</maven.compiler.fork>
 
         <guava.version>16.0.1</guava.version>
-        <junit.version>4.11</junit.version>
+        <junit.version>4.13.1</junit.version>
     </properties>
 
     <dependencies>
