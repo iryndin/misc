@@ -16,7 +16,7 @@
         <maven.compiler.fork>true</maven.compiler.fork>
 
         <guava.version>19.0</guava.version>
-        <snakeyaml.version>1.17</snakeyaml.version>
+        <snakeyaml.version>1.26</snakeyaml.version>
         <commons.io.version>2.5</commons.io.version>
         <slf4j.version>1.7.22</slf4j.version>
         <logback.version>1.1.9</logback.version>
