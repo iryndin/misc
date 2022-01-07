@@ -17,7 +17,7 @@
         <maven.compiler.fork>true</maven.compiler.fork>
 
         <dropwizard.version>1.1.0</dropwizard.version>
-        <h2.version>1.4.194</h2.version>
+        <h2.version>2.0.206</h2.version>
         <junit.version>4.12</junit.version>
         <mockito.version>2.7.22</mockito.version>
     </properties>
