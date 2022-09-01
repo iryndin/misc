@@ -16,7 +16,7 @@
         <maven.compiler.fork>true</maven.compiler.fork>
 
         <guava.version>17.0</guava.version>
-        <jsoup.version>1.7.3</jsoup.version>
+        <jsoup.version>1.15.3</jsoup.version>
     </properties>
 
     <build>
